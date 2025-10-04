@@ -1,8 +1,10 @@
 const express = require("express");
 
-const Url = require("./models/url");
+const URL = require("./models/url");
 const { connectToDatabase } = require("./connection");
-const { connect } = require("mongoose");
+
+const urlRouter = require("./routes/url");
+
 const app = express();
 const port = 3000;
 
@@ -13,6 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
 	res.status(200).send("Hello, world!");
 });
+
+app.use("/url", urlRouter);
 
 //Connection to database
 connectToDatabase("mongodb://172.24.96.1:27017/urlShortner")
