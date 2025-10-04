@@ -1,4 +1,8 @@
-const express = require('express');
+const express = require("express");
+
+const Url = require("./models/url");
+const { connectToDatabase } = require("./connection");
+const { connect } = require("mongoose");
 const app = express();
 const port = 3000;
 
@@ -6,10 +10,15 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    res.status(200).send('Hello, world!')
-})
+app.get("/", (req, res) => {
+	res.status(200).send("Hello, world!");
+});
+
+//Connection to database
+connectToDatabase("mongodb://172.24.96.1:27017/urlShortner")
+	.then(() => console.log("Connected to database"))
+	.catch((err) => console.log("Error connecting to database", err));
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-})
+	console.log(`Server is running at http://localhost:${port}`);
+});
