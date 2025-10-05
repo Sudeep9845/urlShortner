@@ -1,20 +1,24 @@
 const express = require("express");
+const path = require("path");
 
 const URL = require("./models/url");
 const { connectToDatabase } = require("./connection");
 
 const urlRouter = require("./routes/url");
+const staticRouter = require("./routes/staticRouter");
 
 const app = express();
 const port = 3000;
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-	res.status(200).send("Hello, world!");
-});
 
 app.get("/:shortId", async (req, res) => {
 	const { shortId } = req.params;
@@ -28,14 +32,15 @@ app.get("/:shortId", async (req, res) => {
 					timeStamp: new Date().getTime(),
 				},
 			},
-		},
-		{
-			new: true,
 		}
 	);
-	res.status(302).redirect(entry.redirectUrl);
+	if (!entry) {
+		return res.status(404);
+	}
+	res.status(200).redirect(entry.redirectUrl);
 });
 
+app.use("/",staticRouter)
 app.use("/url", urlRouter);
 
 //Connection to database

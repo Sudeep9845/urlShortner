@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/stylesheets/output.css" />
+		<title>URL Shortener</title>
+	</head>
+	<body class="box-border p-0 m-0 font-poppins">
+		<div
+			id="main1"
+			class="flex flex-col items-center w-full min-h-screen p-5 text-white bg-zinc-800"
+		>
+			<h1 class="mb-8 text-4xl font-bold">URL Shortener</h1>
+			<form
+				method="POST"
+				action="/url"
+				class="flex flex-col items-center w-full gap-4 sm:flex-row max-w-lg"
+			>
+				<label for="url" class="sr-only">Enter URL</label>
+				<input
+					type="text"
+					id="url"
+					name="url"
+					placeholder="Enter your URL here"
+					class="flex-grow w-full p-3 border rounded-md bg-zinc-700 border-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				/>
+				<button
+					id="shortenBtn"
+					type="submit"
+					class="w-full px-6 py-3 font-bold text-white transition-colors bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700"
+				>
+					Shorten
+				</button>
+			</form>
+			<% if(locals.shortId){ %>
+			<div
+				id="result"
+				class="flex flex-col justify-center w-full max-w-lg p-4 mt-8 border rounded-md bg-zinc-700 border-zinc-600"
+			>
+				<p class="mb-2 text-sm text-gray-300 text-left">Your shortened URL</p>
+				<div class="flex justify-between w-full gap-4">
+					<input
+						type="text"
+						id="shortUrl"
+						readonly
+						value="<%=`http://localhost:3000/${shortId}`%>"
+						class="p-2 flex-grow text-lg text-center text-white bg-transparent border-none rounded-md focus:outline-none"
+					/>
+					<button
+						id="copyBtn"
+						class="px-4 py-2 font-semibold text-white transition-colors bg-green-600 rounded-md hover:bg-green-700 disabled:bg-gray-500 disabled:cursor-not-allowed"
+					>
+						Copy
+					</button>
+				</div>
+			</div>
+			<% } %>
+			<div class="overflow-x-auto mt-8">
+				<% if(locals.allUrls){ %>
+				<table
+					class="min-w-full border border-gray-200 rounded-lg overflow-hidden"
+				>
+					<thead class="bg-blue-600 text-white">
+						<tr>
+							<th class="px-4 py-3 text-left text-sm font-semibold">S.No.</th>
+							<th class="px-4 py-3 text-left text-sm font-semibold">
+								Short ID
+							</th>
+							<th class="px-4 py-3 text-left text-sm font-semibold">
+								Redirect URL
+							</th>
+							<th class="px-4 py-3 text-left text-sm font-semibold">
+								Visit History
+							</th>
+						</tr>
+					</thead>
+
+					<tbody class="divide-y divide-gray-200 text-gray-700">
+						<% allUrls.forEach((url,index)=>{ %>
+						<tr class="hover:bg-gray-50">
+							<td class="px-4 py-3"><%= index+1 %></td>
+							<td class="px-4 py-3"><%= url.shortId %></td>
+							<td class="px-4 py-3 text-blue-400 underline">
+								<a
+									href="<%= url.redirectUrl %>"
+									target="_blank"
+									rel="noopener noreferrer"
+									><%= url.redirectUrl %></a
+								>
+							</td>
+							<td class="px-4 py-3"><%= url.visitHistory.length %></td>
+						</tr>
+						<% }) %>
+					</tbody>
+				</table>
+				<% } %>
+			</div>
+		</div>
+		<script>
+			// Pass server-side variable to client-side script
+			const origin = window.location.origin;
+			const copyBtn = document.getElementById("copyBtn");
+			const url = document.getElementById("url");
+			const shortenBtn = document.getElementById("shortenBtn");
+			const shortUrlInput = document.getElementById("shortUrl");
+			copyBtn?.addEventListener("click", () => {
+				navigator.clipboard.writeText(shortUrlInput.value);
+				copyBtn.textContent = "Copied!";
+				setTimeout(() => {
+					copyBtn.textContent = "Copy";
+				}, 2000);
+			});
+			
+		</script>
+	</body>
+</html>
