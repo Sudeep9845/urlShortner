@@ -10,10 +10,30 @@ const port = 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
 	res.status(200).send("Hello, world!");
+});
+
+app.get("/:shortId", async (req, res) => {
+	const { shortId } = req.params;
+	const entry = await URL.findOneAndUpdate(
+		{
+			shortId,
+		},
+		{
+			$push: {
+				visitHistory: {
+					timeStamp: new Date().getTime(),
+				},
+			},
+		},
+		{
+			new: true,
+		}
+	);
+	res.status(302).redirect(entry.redirectUrl);
 });
 
 app.use("/url", urlRouter);

@@ -1,7 +1,12 @@
-const express = require("express")
-const {handelGenertateShortId} = require("../controllers/url")
-const router = express.Router()
+const express = require("express");
+const {
+	handelGenertateShortId,
+	handelGetAnalytics,
+} = require("../controllers/url");
+const router = express.Router();
 
-router.post("/", handelGenertateShortId)
+router.post("/", handelGenertateShortId);
 
-module.exports = router
+router.get("/analytics/:shortId", handelGetAnalytics);
+
+module.exports = router;

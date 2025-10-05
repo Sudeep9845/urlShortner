@@ -13,4 +13,11 @@ const handelGenertateShortId = async (req, res) => {
 	return res.json({ id: shortId, url: body.url });
 };
 
-module.exports = { handelGenertateShortId };
+const handelGetAnalytics = async (req, res) => {
+    const { shortId } = req.params
+    const entry = await URL.findOne({ shortId })
+    if (!entry) return res.status(404).json({ error: "ShortId not found" })
+    return res.json({visitHistory:entry.visitHistory.length, analytics:entry.visitHistory})
+}
+
+module.exports = { handelGenertateShortId,handelGetAnalytics };
