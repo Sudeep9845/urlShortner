@@ -1,6 +1,12 @@
 const shortid = require("shortid");
 const URL = require("../models/url");
 
+const handelUrlPage = async (req, res) => {
+	if (!req.user) return res.redirect("/login");
+	const allUrls = await URL.find({ createdBy: req.user._id });
+	return res.status(200).render("url", { allUrls: allUrls });
+};
+
 const handelGenertateShortId = async (req, res) => {
 	const body = req.body;
 	if (!body.url) return res.status(400).json({ error: "Url is required" });
@@ -9,8 +15,9 @@ const handelGenertateShortId = async (req, res) => {
 		shortId,
 		redirectUrl: body.url,
 		visitHistory: [],
+		createdBy: req.user._id,
 	});
-	return res.render("index", {
+	return res.render("url", {
 		shortId,
 	});
 };
@@ -25,4 +32,4 @@ const handelGetAnalytics = async (req, res) => {
 	});
 };
 
-module.exports = { handelGenertateShortId, handelGetAnalytics };
+module.exports = { handelGenertateShortId, handelGetAnalytics, handelUrlPage };
