@@ -25,8 +25,7 @@ app.use(cookieParser());
 
 app.use("/", staticRouter);
 app.use("/user", userRouter);
-app.use("/urlgen", restrictToLoggedInUser, urlRouter);
-app.use("/url", checkAuth, urlRouter);
+app.use("/url", restrictToLoggedInUser, urlRouter);
 
 app.get("/:shortId", async (req, res) => {
 	const { shortId } = req.params;

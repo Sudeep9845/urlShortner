@@ -7,7 +7,7 @@ const {
 const router = express.Router();
 router.get("/", handelUrlPage);
 
-router.post("/", handelGenertateShortId);
+router.post("/gen", handelGenertateShortId);
 
 router.get("/analytics/:shortId", handelGetAnalytics);
 

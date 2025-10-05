@@ -17,9 +17,7 @@ const handelGenertateShortId = async (req, res) => {
 		visitHistory: [],
 		createdBy: req.user._id,
 	});
-	return res.render("url", {
-		shortId,
-	});
+	return res.render("url",{shortId})
 };
 
 const handelGetAnalytics = async (req, res) => {
