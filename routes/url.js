@@ -4,7 +4,12 @@ const {
 	handelGetAnalytics,
 	handelUrlPage,
 } = require("../controllers/url");
+
+
 const router = express.Router();
+
+
+
 router.get("/", handelUrlPage);
 
 router.post("/gen", handelGenertateShortId);

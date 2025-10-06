@@ -4,6 +4,7 @@ const {
 	handelLogin,
 	handelLogout,
 } = require("../controllers/user");
+
 const router = express.Router();
 
 router.post("/signup", handelSignup);

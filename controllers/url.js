@@ -2,7 +2,6 @@ const shortid = require("shortid");
 const URL = require("../models/url");
 
 const handelUrlPage = async (req, res) => {
-	if (!req.user) return res.redirect("/login");
 	const allUrls = await URL.find({ createdBy: req.user._id });
 	return res.status(200).render("url", { allUrls: allUrls });
 };

@@ -19,9 +19,9 @@ const handelSignup = async (req, res) => {
 	});
 	const token = setUser(user)
 
-	// res.cookie("uid", token);
-	// return res.redirect("/url");
-	return res.json({token})
+	res.cookie("token", token);
+	return res.redirect("/url");
+	// return res.json({token})
 };
 
 const handelLoginPage = (req, res) => {
@@ -34,13 +34,13 @@ const handelLogin = async (req, res) => {
 	if (!user) return res.render("login", { error: "Invalid Credentials" });
 	const token = setUser(user)
 
-	// res.cookie("uid", token);
-	// return res.redirect("/url");
-	return res.json({token})
+	res.cookie("token", token);
+	return res.redirect("/url");
+	// return res.json({token})
 };
 
 const handelLogout = (req, res) => {
-	res.clearCookie("uid");
+	res.clearCookie("token");
 	return res.redirect("/");
 };
 
