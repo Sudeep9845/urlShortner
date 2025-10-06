@@ -1,6 +1,8 @@
 const USER = require("../models/user");
 const { v4: uuidv4 } = require("uuid");
 const { setUser } = require("../services/auth");
+
+
 const handelSignUpPage = (req, res) => {
 	return res.render("signup");
 };
@@ -16,8 +18,10 @@ const handelSignup = async (req, res) => {
 		fullName,
 	});
 	const token = setUser(user)
-	res.cookie("uid", token);
-	return res.redirect("/url");
+
+	// res.cookie("uid", token);
+	// return res.redirect("/url");
+	return res.json({token})
 };
 
 const handelLoginPage = (req, res) => {
@@ -28,9 +32,11 @@ const handelLogin = async (req, res) => {
 	const { password, email } = req.body;
 	const user = await USER.findOne({ email: email, password: password});
 	if (!user) return res.render("login", { error: "Invalid Credentials" });
-	const token = setUser(user);
-	res.cookie("uid", token);
-	return res.redirect("/url");
+	const token = setUser(user)
+
+	// res.cookie("uid", token);
+	// return res.redirect("/url");
+	return res.json({token})
 };
 
 const handelLogout = (req, res) => {
